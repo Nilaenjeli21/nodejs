@@ -1,36 +1,96 @@
-const fs = require ('fs');
-const readline = require('readline');
+const yargs = require('yargs');
+const contacts = require('./contacts');
 
-const rl = readline.createInterface({
-    input : process.stdin,
-    output : process.stdout,
+yargs
+    .command({
+        command: 'add',
+        describe: 'Menambahkan contact baru',
+        builder: {
+            nama: {
+                describe: 'Nama lengkap',
+                demandOption: true,
+                type: 'string',
+            },
+            email: {
+                describe: 'Email',
+                demandOption: true,
+                type: 'string',
+            },
+            noHP: {
+                describe: 'Nomor Handphone',
+                demandOption: false,
+                type: 'string',
+            },
+        },
+        handler(argv) {
+            contacts.simpanContact(argv.nama, argv.email, argv.noHP);
+        },
+    }).demandCommand();
+
+    //menampilkan daftar semua nama contact
+    yargs.command({
+            command: 'list',
+            describe: 'Menampilkan semua nama & no HP contact',
+            handler(){
+                contacts.listContact();
+            },
+    });
+
+    //menampilkan detail sebuah contact
+    yargs.command({
+        command: 'detail',
+        describe: 'Menampilkan detail sebuah contact berdasarkan nama',
+        builder:{
+            nama: {
+                describe: 'Nama lengkap',
+                demandOption: true,
+                type: 'string',
+            },
+        },
+        handler(argv){
+            contacts.detailContact(argv.nama);
+        },
 });
-//membuat folder data
-const dirPath = './data';
-if(!fs.existsSync(dirPath)){
-    fs.mkdirSync(dirPath);
-}
 
-//membuat file json jika belum ada
-const dataPath ='./data/contacts.json';
-if(!fs.existsSync(dataPath)){
-    fs.writeFileSync(dataPath,'[]', 'utf-8');
-}
+//menghapus contack berdasarkan nama
+yargs.command({
+    command: 'delete',
+    describe: 'Menghapus sebuah contact berdasarkan nama',
+    builder:{
+        nama: {
+            describe: 'Nama lengkap',
+            demandOption: true,
+            type: 'string',
+        },
+    },
+    handler(argv){
+        contacts.deleteContact(argv.nama);
+    },
+});
 
-rl.question('Masukkan Nama Anda : ', (nama)=>{
-    rl.question('Masukkan no HP anda : ',(noHP) =>{
-        const contact = {nama, noHP};
+yargs.parse();
 
-        //membaca isi file JSON secara asyncron
-        const file = fs.readFileSync('data/contacts.json', 'utf-8');
-        const contacts = JSON.parse(file);
 
-        contacts.push(contact);
 
-        fs.writeFileSync('data/contact.json', JSON.stringify(contacts));
 
-        console.log('Terimaksih sudah memasukkan data.');
 
-        rl.close();
-    });
-    });
+
+
+
+
+
+
+
+
+
+// //membuat varibel untuk fungsi utama yang berisi arrow function
+// const contacts = require('./contacts');
+
+// const main =async () => {
+//     const nama = await contacts.tulisPertanyaan('Masukkan Nama Anda : ');
+//     const email = await contacts.tulisPertanyaan('Masukkan Email Anda : ');
+//     const noHP = await contacts.tulisPertanyaan('Masukkan No HP Anda : ');
+
+//    contacts.simpanContact(nama, email, noHP);
+// };
+// main();
