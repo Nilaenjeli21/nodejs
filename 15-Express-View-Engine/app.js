@@ -6,9 +6,7 @@ const port = 3000
 //gunakan ejs
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
-
-
-app.get('/', (req, res) => {
+app.get('/', (req, res,) => {
  
 //res.sendFile('./index.html',{root: __dirname});
 const mahasiswa = [
@@ -29,7 +27,9 @@ const mahasiswa = [
 res.render('index',{ 
   nama: 'Nila Enjeli',
   title :'Halaman Home',
-  mahasiswa,});
+  mahasiswa,
+  layout: 'layouts/main-layout',
+});
 });
 app.get('/about', (req, res) => {
     //res.send('Ini adalah Halaman About!')
