@@ -2,34 +2,48 @@ const http = require('http');
 const fs = require('fs');
 const port = 3000;
 
-
-http
-.createServer((req, res) => {
-    res.writeHead(200, {
-        'Content-Type' : 'text/html',
-    });
-
-    const url = req.url;
-   if( url === '/about'){
-    res.write('<h1>Ini Adalah Halaman About</h1>');
-    res.end();
-   }else if(url === '/contact'){
-    res.write('<h1>Ini Adalah Halaman Contact</h1>');
-    res.end();
-   }else{
-    //res.write('Hello World!');
-
-    fs.readFile('./index.html', (err, data) => {
+const renderHTML = (path, res) => {
+    fs.readFile(path, (err, data) => {
         if(err) {
             res.writeHead(404);
             res.write('Error: file not found');
         } else{
             res.write(data);
         }
-        res.end();
+         res.end();
     });
-   }  
+};
+
+
+http.createServer((req, res) => {
+    res.writeHead(200, {
+        'Content-Type': 'text/html',
+    });
+
+    const url = req.url;
+    switch(url){
+        case'/about':
+        renderHTML('./about.html', res);
+        break;
+        case'/contact':
+        renderHTML('./contact.html', res);
+        break;
+        default:
+        renderHTML('./about.html', res);
+        break;
+    }
 })
+
+//    if( url === '/about'){
+//     renderHTML('./about.html', res)
+//    }else if(url === '/contact'){
+//     renderHTML('./contact.html', res)
+//    }else{
+//     //res.write('Hello World!');
+//     renderHTML('./index.html', res);
+//    }
+// })
+
 .listen(port,() => {
     console.log(`Server is listening on ${port}..`)
 });
