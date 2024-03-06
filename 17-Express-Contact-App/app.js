@@ -1,82 +1,79 @@
-const express = require('express')
+const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const {loadContact, findContact}= require('./utils/contact');
+const { loadContact, findContact } = require('./utils/contacts');
+const app = express();
+const port = 3000;
 
-const app = express()
-const port = 3000
 
 //gunakan ejs
 app.set('view engine', 'ejs');
 
-//Third-party Middleware
+//third-party middleware
 app.use(expressLayouts);
 
-//Built-in middleware
-app.use(express.static('public'));
 
+//buidt-in middleware
+app.use(express.static('public'))
 
 
 app.get('/', (req, res) => {
- 
-//res.sendFile('./index.html',{root: __dirname});
-const mahasiswa = [
-  {
-    nama : 'Nila Enjeli',
-    email : 'nilaanjeli1904@gmail.com',
-  },
-  {
-    nama : 'Meri',
-    email : 'meri@gmail.com',
-  },
-  {
-    nama : 'Puput',
-    email : 'putri@gmail.com',
-  }
-]
+    const mhs = [
+        {
+            nama: 'salsabila',
+            email: 'salsa@gmail.com',
+        },
+        {
+            nama: 'salu',
+            email: 'salu@gmail.com',
+        },
+    ];
+    res.render('index', {
+        nama: 'salu',
+        title: 'halaman home',
+        mhs,
+        layout: 'layouts/main-layout',
 
-res.render('index',{ 
-  nama: 'Nila Enjeli',
-  title :'Halaman Home',
-  mahasiswa,
-  layout: 'layouts/main-layout',
+    });
 });
-});
-app.get('/about', (req, res, next) => {
-  const contacts = loadContact();
-  console.log(contacts);
-    
+app.get('/about', (req, res) => {
     res.render('about', {
-      layout:'layouts/main-layout',
-       title :'Halaman About',
-      });
-  });
 
+        layout: 'layouts/main-layout',
+        title: 'Halaman About',
+    });
+
+
+});
 app.get('/contact', (req, res) => {
-   const contact = loadContact();
+    const contacts = loadContact();
 
     res.render('contact', {
-      layout:'layouts/main-layout',
-       title :'Halaman Contact',
-       contact,
-      });
-  });
-  
+        title: 'Halaman Contact',
+        layout: 'layouts/main-layout',
+        contacts,
+    });
+
+});
 app.get('/contact/:nama', (req, res) => {
-  const contact = findContact(req.params.nama);
+    const contact = findContact(req.params.nama);
 
     res.render('detail', {
-      layout:'layouts/main-layout',
-       title :'Halaman Detail Contact',
-       contact,
-      });
-  });
-  
-  //menjalankan sebuah midleware
-  app.use('/', (req, res) => {
+        title: 'Halaman Contact',
+        layout: 'layouts/main-layout',
+        contact,
+    });
+
+});
+
+app.get('/product/:id', (req, res) => {
+    res.send(`Product ID :  ${req.params.id}<br> Category : ${req.query.category}`);
+});
+
+app.use('/', (req, res) => {
     res.status(404);
     res.send('<h1>404</h1>');
-  });
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Example app listening at http://localhost:${port}`);
+});
