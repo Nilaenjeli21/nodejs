@@ -19,16 +19,16 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
     const mhs = [
         {
-            nama: 'salsabila',
-            email: 'salsa@gmail.com',
+            nama: 'Nila Enjeli',
+            email: 'caca@gmail.com',
         },
         {
-            nama: 'salu',
-            email: 'salu@gmail.com',
+            nama: 'Yumna',
+            email: 'yumna@gmail.com',
         },
     ];
     res.render('index', {
-        nama: 'salu',
+        nama: 'Teman-Teman',
         title: 'halaman home',
         mhs,
         layout: 'layouts/main-layout',

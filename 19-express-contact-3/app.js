@@ -36,16 +36,16 @@ app.use(flash());
 app.get('/', (req, res) => {
     const mhs = [
         {
-            nama: 'salsabila',
-            email: 'salsa@gmail.com',
+            nama: 'nila Enjeli',
+            email: 'nilaanjeli19@gmail.com',
         },
         {
-            nama: 'salu',
-            email: 'salu@gmail.com',
+            nama: 'yumna',
+            email: 'yumna@gmail.com',
         },
     ];
     res.render('index', {
-        nama: 'salu',
+        nama: 'Teman-Teman',
         title: 'halaman home',
         mhs,
         layout: 'layouts/main-layout',
